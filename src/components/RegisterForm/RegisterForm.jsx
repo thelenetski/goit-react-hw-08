@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
+import toast from 'react-hot-toast';
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -37,10 +38,11 @@ const RegisterForm = () => {
       )
         .unwrap()
         .then(() => {
-          console.log('login success');
+          // console.log('login success');
+          toast.success('register success');
         })
         .catch(() => {
-          console.log('login error');
+          toast.error('register error');
         });
     },
   });
