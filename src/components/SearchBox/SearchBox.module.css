@@ -1,0 +1,8 @@
+.searchBox {
+  width: 100%;
+  max-width: 400px;
+}
+
+.searchBox p {
+  font-weight: bold;
+}
