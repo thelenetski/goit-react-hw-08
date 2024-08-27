@@ -14,6 +14,7 @@ const Contact = ({ contact }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedContact, setEditedContact] = useState({
+    id: contact.id,
     name: contact.name,
     number: contact.number,
   });
