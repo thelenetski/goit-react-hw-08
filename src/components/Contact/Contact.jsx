@@ -84,7 +84,6 @@ const Contact = ({ contact }) => {
       >
         <p>Are you sure you want to delete this contact?</p>
       </ModalWindow>
-      {/* Модальное окно для редактирования контакта */}
       <ModalWindow
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
