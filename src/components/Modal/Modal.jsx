@@ -19,9 +19,7 @@ const ModalWindow = ({ isOpen, onClose, onSuccess, children }) => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Important notification
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
-            {children}
-          </Typography>
+          {children}
           <Button
             onClick={onSuccess}
             variant="contained"

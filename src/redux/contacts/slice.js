@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './operations';
+import {
+  fetchContacts,
+  addContact,
+  deleteContact,
+  patchContact,
+} from './operations';
 import { logOut } from '../auth/operations';
 import toast from 'react-hot-toast';
 
@@ -47,6 +52,20 @@ const contactsSlice = createSlice({
         toast.success('Contact delete successfully');
       })
       .addCase(deleteContact.rejected, handleRejected)
+      .addCase(patchContact.pending, handlePending)
+      .addCase(patchContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.items = state.items.map(contact => {
+          if (contact.id === action.payload.id) {
+            return (contact = action.payload);
+          }
+          return contact;
+        });
+        console.log(state.items);
+        toast.success('Contact update successfully');
+      })
+      .addCase(patchContact.rejected, handleRejected)
       .addCase(logOut.fulfilled, state => {
         state.items = [];
         state.error = null;
