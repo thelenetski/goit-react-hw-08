@@ -6,8 +6,8 @@ import { FaUser } from 'react-icons/fa6';
 import { IconButton, TextField } from '@mui/material';
 import { MdEdit } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
-import ModalWindow from '../Modal/Modal';
 import { useState } from 'react';
+import ModalWindow from '../Modal/Modal';
 
 const Contact = ({ contact }) => {
   const dispatch = useDispatch();
@@ -19,18 +19,21 @@ const Contact = ({ contact }) => {
     number: contact.number,
   });
 
-  const closeModal = () => setIsModalOpen(false);
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-    setEditedContact({
-      id: contact.id,
-      name: contact.name,
-      number: contact.number,
-    });
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
-  const onDelete = () => setIsModalOpen(true);
-  const onEdit = () => setIsEditModalOpen(true);
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const onDelete = () => {
+    setIsModalOpen(true);
+  };
+
+  const onEdit = () => {
+    setIsEditModalOpen(true);
+  };
 
   const handleEditChange = e => {
     const { name, value } = e.target;
@@ -40,14 +43,14 @@ const Contact = ({ contact }) => {
     }));
   };
 
-  const handleEditSubmit = () => {
-    dispatch(patchContact({ id: contact.id, ...editedContact }));
+  const handleSubmit = () => {
+    dispatch(deleteContact(contact.id));
     closeEditModal();
   };
 
-  const onSuccess = () => {
-    dispatch(deleteContact(contact.id));
-    closeModal();
+  const handleEditSubmit = () => {
+    dispatch(patchContact({ id: contact.id, ...editedContact }));
+    closeEditModal();
   };
 
   return (
@@ -81,7 +84,7 @@ const Contact = ({ contact }) => {
       <ModalWindow
         isOpen={isModalOpen}
         onClose={closeModal}
-        onSuccess={onSuccess}
+        onSuccess={handleSubmit}
       >
         <p>Are you sure you want to delete this contact?</p>
       </ModalWindow>

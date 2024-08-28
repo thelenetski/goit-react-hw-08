@@ -62,7 +62,6 @@ const contactsSlice = createSlice({
           }
           return contact;
         });
-        console.log(state.items);
         toast.success('Contact update successfully');
       })
       .addCase(patchContact.rejected, handleRejected)

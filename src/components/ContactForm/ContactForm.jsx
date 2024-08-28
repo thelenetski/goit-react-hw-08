@@ -14,9 +14,10 @@ const ContactForm = () => {
       .max(50, 'Too Long!')
       .required('Required'),
     number: Yup.string()
-      .min(3, 'Too Short!')
+      .min(7, 'Too Short!')
       .max(50, 'Too Long!')
-      .required('Required'),
+      .required('Required')
+      .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Phone number is not valid'),
   });
 
   const formik = useFormik({
@@ -50,7 +51,7 @@ const ContactForm = () => {
           fullWidth
           id="number"
           name="number"
-          label="Number"
+          label="Phone number (+3811122334444)"
           type="tel"
           value={formik.values.number}
           onChange={formik.handleChange}

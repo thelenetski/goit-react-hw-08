@@ -7,6 +7,11 @@ import Modal from '@mui/material/Modal';
 const ModalWindow = ({ isOpen, onClose, onSuccess, children }) => {
   if (!isOpen) return null;
 
+  const success = () => {
+    onSuccess();
+    onClose();
+  };
+
   return createPortal(
     <>
       <Modal
@@ -17,11 +22,11 @@ const ModalWindow = ({ isOpen, onClose, onSuccess, children }) => {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Important notification
+            Notification
           </Typography>
           {children}
           <Button
-            onClick={onSuccess}
+            onClick={success}
             variant="contained"
             color="success"
             sx={{ mr: 2 }}
