@@ -3,14 +3,55 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal, modalTypes } from '../../redux/modal/slice';
+import {
+  selectContentModal,
+  selectIsOpenModal,
+  selectTypeModal,
+} from '../../redux/modal/selectors';
+import { useEffect, useState } from 'react';
+import { deleteContact, patchContact } from '../../redux/contacts/operations';
+import EditForm from './EditForm';
 
-const ModalWindow = ({ isOpen, onClose, onSuccess, children }) => {
-  if (!isOpen) return null;
+const ModalWindow = ({ children }) => {
+  const dispatch = useDispatch();
+  const isOpen = useSelector(selectIsOpenModal);
+  const type = useSelector(selectTypeModal);
+  const content = useSelector(selectContentModal);
 
-  const success = () => {
-    onSuccess();
-    onClose();
+  const [editedContact, setEditedContact] = useState({
+    name: '',
+    number: '',
+  });
+
+  useEffect(() => {
+    if (type !== modalTypes.editContact) return;
+    setEditedContact(content);
+  }, [content, type]);
+
+  const handleDelete = () => {
+    dispatch(deleteContact(content.id));
   };
+
+  const handleEditChange = e => {
+    const { name, value } = e.target;
+    setEditedContact(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleEditSubmit = () => {
+    dispatch(patchContact({ ...editedContact }));
+  };
+
+  const onSuccess = () => {
+    if (type === modalTypes.confirmDelete) return handleDelete();
+    if (type === modalTypes.editContact) return handleEditSubmit();
+  };
+
+  const onClose = () => dispatch(closeModal());
 
   return createPortal(
     <>
@@ -24,9 +65,15 @@ const ModalWindow = ({ isOpen, onClose, onSuccess, children }) => {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Notification
           </Typography>
-          {children}
+          {type === modalTypes.confirmDelete && children}
+          {type === modalTypes.editContact && (
+            <EditForm
+              editedContact={editedContact}
+              handleEditChange={handleEditChange}
+            />
+          )}
           <Button
-            onClick={success}
+            onClick={onSuccess}
             variant="contained"
             color="success"
             sx={{ mr: 2 }}

@@ -1,57 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { deleteContact, patchContact } from '../../redux/contacts/operations';
 import css from './Contact.module.css';
 import { FaPhone } from 'react-icons/fa6';
 import { FaUser } from 'react-icons/fa6';
-import { IconButton, TextField } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { MdEdit } from 'react-icons/md';
 import { IoClose } from 'react-icons/io5';
-import { useState } from 'react';
+import { openConfirmDelete, openEditContact } from '../../redux/modal/slice';
 import ModalWindow from '../Modal/Modal';
 
 const Contact = ({ contact }) => {
   const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editedContact, setEditedContact] = useState({
-    id: contact.id,
-    name: contact.name,
-    number: contact.number,
-  });
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const onDelete = () => {
-    setIsModalOpen(true);
-  };
-
-  const onEdit = () => {
-    setIsEditModalOpen(true);
-  };
-
-  const handleEditChange = e => {
-    const { name, value } = e.target;
-    setEditedContact(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = () => {
-    dispatch(deleteContact(contact.id));
-    closeEditModal();
-  };
-
-  const handleEditSubmit = () => {
-    dispatch(patchContact({ id: contact.id, ...editedContact }));
-    closeEditModal();
-  };
 
   return (
     <div className={css.contact}>
@@ -69,49 +27,20 @@ const Contact = ({ contact }) => {
         color="success"
         size="large"
         aria-label="change"
-        onClick={onEdit}
+        onClick={() => dispatch(openEditContact(contact))}
       >
         <MdEdit />
       </IconButton>
       <IconButton
         color="error"
         aria-label="delete"
-        onClick={onDelete}
+        onClick={() => dispatch(openConfirmDelete(contact))}
         size="large"
       >
         <IoClose />
       </IconButton>
-      <ModalWindow
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onSuccess={handleSubmit}
-      >
+      <ModalWindow>
         <p>Are you sure you want to delete this contact?</p>
-      </ModalWindow>
-      <ModalWindow
-        isOpen={isEditModalOpen}
-        onClose={closeEditModal}
-        onSuccess={handleEditSubmit}
-      >
-        <form>
-          <TextField
-            label="New name"
-            name="name"
-            value={editedContact.name}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="New number"
-            name="number"
-            value={editedContact.number}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-            sx={{ mb: 2 }}
-          />
-        </form>
       </ModalWindow>
     </div>
   );
