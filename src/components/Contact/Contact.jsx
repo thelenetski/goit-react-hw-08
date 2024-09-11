@@ -83,18 +83,20 @@ const Contact = ({ contact }) => {
       >
         <IoClose />
       </IconButton>
-      <ModalWindow onSuccess={onSuccess}>
-        {type === modalTypes.editContact && (
-          <EditForm
-            editedContact={editedContact}
-            handleEditChange={handleEditChange}
-          />
-        )}
+      {content !== null && contact.id === content.id && (
+        <ModalWindow onSuccess={onSuccess}>
+          {type === modalTypes.editContact && (
+            <EditForm
+              editedContact={editedContact}
+              handleEditChange={handleEditChange}
+            />
+          )}
 
-        {type === modalTypes.confirmDelete && (
-          <p>Are you sure you want to delete this contact?</p>
-        )}
-      </ModalWindow>
+          {type === modalTypes.confirmDelete && (
+            <p>Are you sure you want to delete this contact?</p>
+          )}
+        </ModalWindow>
+      )}
     </div>
   );
 };
